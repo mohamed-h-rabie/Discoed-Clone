@@ -48,7 +48,7 @@ This project started as part of [this course](https://www.youtube.com/watch?v=Zb
   - Translations for both pt-BR and EN
 
 - **🗄️ New MySql server**
-  - Because of the end of Planetscale's hobby free "forever" plan, I'm now hosting the MySql database on [Aiven](https://aiven.io) 
+  - Because of the end of Planetscale's hobby free "forever" plan, I'm now hosting the MySql database on [Neon](https://console.neon.tech/app/projects) 
 
 - **👋 Welcome Page**
   - Initial page with CTA to invite friends to chat or create a server.
