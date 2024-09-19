@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 🎉 Discourse - Totally Original Live Chat App
 
-## Getting Started
+This project started as part of [this course](https://www.youtube.com/watch?v=ZbX4Ok9YX94) by the extremely generous Code With Antonio, and now it has a new design and some new features outside of the course scope. Check it out:
 
-First, run the development server:
+### 🚀 Main Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **💬 Messaging**
+  - Real-time messaging using [Socket.IO](https://socket.io) WebSocket and a [@tanstack/query](https://tanstack.com/query/latest) polling fallback.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **🔊 Video and Audio call**
+  - Realtime video and audio call with [LiveKit](https://livekit.io)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **📎 Attachments**
+  - Send attachments as messages using [UploadThing](https://uploadthing.com).
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **🗄️ ORM & Database**
+  - ORM setup using [Prisma](https://www.prisma.io) with MySQL. 
 
-## Learn More
+- **🔐 Authentication**
+  - Secure authentication implemented with [Clerk](https://clerk.com).
 
-To learn more about Next.js, take a look at the following resources:
+- **📜 Infinite Scrolling**
+  - Load messages in batches of 15 using [@tanstack/query](https://tanstack.com/query/latest) for infinite scrolling.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **🏠 Servers**
+  - Create and customize servers where you can create audio, text and video channels.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **✏️ Message Management**
+  - Delete and edit messages in real time.
 
-## Deploy on Vercel
+- **🛠️ Member Management**
+  - Manage members with options to kick, change roles (Guest/Moderator), and more.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+### ✨ Changes and new Features
+
+- **💅 Brand new UI**
+  - Aesthetically pleasing UI built with TailwindCSS and Figma [(click here to see the design)](https://www.figma.com/design/mW7pmuDuwELvesOq759VIC/Discourse?node-id=0-1&t=tAIdE2khFXYmdgcG-1).
+
+- **🌗 Light / Dark Mode**
+  - Support for both light and dark themes with [TailwindCSS](https://tailwindcss.com)
+
+- **📱 Fully Responsive**
+  - The new design is fully responsive with optimized mobile UI.
+
+- **🌐 Internationalization (i18n)**
+  - Translations for both pt-BR and EN
+
+- **🗄️ New MySql server**
+  - Because of the end of Planetscale's hobby free "forever" plan, I'm now hosting the MySql database on [Aiven](https://aiven.io) 
+
+- **👋 Welcome Page**
+  - Initial page with CTA to invite friends to chat or create a server.
+
+- **✉️ 1:1 Directs**
+  - Direct messaging and 1:1 video and audio calls.
+  
+- **📞Direct Call notification**
+  - Get notified of calls with options to reject or accept.
+
+- **🔗 Invitation System**
+  - Generate unique invite links for servers and direct messages.
+
+
+
+## ⚠️ Disclaimer
+
+This is intended for educational purposes only. Please be aware that, as with any platform where users can upload content, there is a risk of inappropriate or offensive material being shared. The project maintainers are not responsible for any content uploaded by users. It is recommended to implement content moderation practices if deploying this project publicly.
