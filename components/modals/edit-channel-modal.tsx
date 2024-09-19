@@ -19,9 +19,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { object, z } from "zod";
-import FileUpload from "../file-upload";
-import { useParams, useRouter } from "next/navigation";
+import { z } from "zod";
+
+import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-hook";
 import { ChannelType } from "@prisma/client";
 import {
@@ -33,6 +33,7 @@ import {
 } from "../ui/select";
 import queryString from "query-string";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 const formSchema = z.object({
   name: z
     .string()
@@ -45,7 +46,7 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export function CreateChannelModal() {
+export function EditChannelModal() {
   const router = useRouter();
   //another way to get serverId
   // const params = useParams();
@@ -53,30 +54,34 @@ export function CreateChannelModal() {
   // console.log(serverId);
 
   const { isOpen, type, onClose, data, onOpen } = useModal();
-  const isOpenModal = isOpen && type === "createChannel";
-  const { server } = data;
+  const isOpenModal = isOpen && type === "editChannel";
+  const { server, channelType, channel } = data;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType?.TEXT,
     },
   });
   const isLoading = form.formState.isSubmitting;
-
+  useEffect(() => {
+    if (channel) {
+      form.setValue("name", channel?.name);
+      form.setValue("type", channel?.type);
+    }
+  }, [channel, form]);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     try {
       const url = queryString.stringifyUrl({
-        url: "/api/channels",
+        url: `/api/channels/${channel?.id}`,
         query: {
           serverId: server?.id,
         },
       });
-      const res = await axios.post(url, values);
+      const res = await axios.patch(url, values);
       console.log(res);
 
-      onOpen("createChannel", { server: res.data });
       form.reset();
       router.refresh();
       onClose();
@@ -93,7 +98,7 @@ export function CreateChannelModal() {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-center text-2xl font-bold">
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
