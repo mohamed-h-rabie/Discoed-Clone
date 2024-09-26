@@ -12,9 +12,11 @@ const ServerIdLayout = async ({
   params: { serverId: string };
 }) => {
   const profile = await currentprofile();
+
   if (!profile) {
     return redirectToSignIn();
   }
+
   const server = await db.server.findUnique({
     where: {
       id: params.serverId,
@@ -25,10 +27,10 @@ const ServerIdLayout = async ({
       },
     },
   });
+
   if (!server) {
     return redirect("/");
   }
-  console.log(params);
 
   return (
     <div className="h-full">
