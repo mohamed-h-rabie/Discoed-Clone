@@ -1,13 +1,14 @@
 "use client";
 import { Member, Message, Profile } from "@prisma/client";
-import { Fragment } from "react";
+import { ElementRef, Fragment, useRef } from "react";
 import { ChatWelcome } from "./chat-welcome";
 import { useChatQuery } from "@/hooks/use-chat-query";
-import { ServerCrash } from "lucide-react";
+import { Loader2, ServerCrash } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChatItem } from "./chat-item";
 import { format } from "date-fns";
-const DATE_FORMT = "d MM yyyy ,HH:mm";
+import { useChatSocket } from "@/hooks/use-chat-socket";
+const DATE_FORMAT = "d MM yyyy ,HH:mm";
 interface ChatMessagesProps {
   name: string;
   member: Member;
@@ -36,8 +37,16 @@ export const ChatMessages = ({
   paramValue,
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
+  const addKey = `chat:${chatId}:messages`;
+  const updateKey = `chat:${chatId}:messages:update`;
+
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const bottomRef = useRef<ElementRef<"div">>(null);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({ queryKey, apiUrl, paramKey, paramValue });
+  useChatSocket({ queryKey, addKey, updateKey });
+
   const renderSkeletons = Array(8)
     .fill(0)
     .map((_, idx) => (
@@ -82,30 +91,45 @@ export const ChatMessages = ({
     );
   }
   return (
-    <div className="flex-1 flex flex-col py-4 overflow-y-auto">
-      <div className="flex-1" />
-      <ChatWelcome name={name} type={type} />
-      <div className=" flex flex-col-reverse mt-auto ">
-        {data?.pages.map((group, i) => (
+    <div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
+      {!hasNextPage && <div className="flex-1" />}
+      {!hasNextPage && <ChatWelcome type={type} name={name} />}
+      {hasNextPage && (
+        <div className="flex justify-center">
+          {isFetchingNextPage ? (
+            <Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
+          ) : (
+            <button
+              onClick={() => fetchNextPage()}
+              className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 text-xs my-4 dark:hover:text-zinc-300 transition"
+            >
+              Load previous messages
+            </button>
+          )}
+        </div>
+      )}
+      <div className="flex flex-col-reverse mt-auto">
+        {data?.pages?.map((group, i) => (
           <Fragment key={i}>
-            {group?.items.map((message: MessageWithMemberWithProfile) => (
+            {group?.items?.map((message: MessageWithMemberWithProfile) => (
               <ChatItem
-                id={message.id}
                 key={message.id}
+                id={message.id}
+                currentMember={member}
+                member={message.member}
                 content={message.content}
                 fileUrl={message.fileUrl}
-                member={message.member}
-                currentMember={member}
-                timestamp={format(message.createdAt, DATE_FORMT)}
                 deleted={message.deleted}
-                isUpdated={message.createdAt !== message.updatedAt}
-                socketQuery={socketQuery}
+                timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                isUpdated={message.updatedAt !== message.createdAt}
                 socketUrl={socketUrl}
+                socketQuery={socketQuery}
               />
             ))}
           </Fragment>
         ))}
       </div>
+      <div ref={bottomRef} />
     </div>
   );
 };
