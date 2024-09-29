@@ -61,8 +61,11 @@ This project started as part of [this course](https://www.youtube.com/watch?v=Zb
 
 - **🔗 Invitation System**
   - Generate unique invite links for servers and direct messages.
-
-
+  -Email : mo2@discord.com
+  -password: mo2@discord.com
+   another one
+   -Email : mo@discord.com
+   -password: mo@discord.com
 
 ## ⚠️ Disclaimer
 
